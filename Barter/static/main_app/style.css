@@ -1,0 +1,23 @@
+#navbar{
+    width: 100%;
+    overflow: hidden;  //code added to prevent scroll
+}
+
+
+#static_right{
+    width: 210px;
+    height: 700px;
+    background-repeat:repeat-y;
+    overflow:hidden;  //code added to prevent scroll
+    position:absolute;
+    font-size: 16px;
+}
+
+#content{
+   height: auto;
+   padding: 20px;
+   margin-left: 230px;
+   margin-right: 20px;
+   padding-bottom: 30px;
+   overflow: auto;  //code added
+}

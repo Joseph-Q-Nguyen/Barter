@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'main_app'
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,6 @@ DATABASES = {
     'HOST': 'barter.crfnzn2kfilh.us-west-1.rds.amazonaws.com',
     'PORT': '5432',
     }
-
 }
 # DATABASES = {
 #     'default': {
