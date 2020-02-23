@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "main_app/style.css" %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static "favicon.ico" %}">
+    {% block links %}
+    {% endblock %}
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
   </head>
@@ -30,7 +32,7 @@
                   <img src="{% static "man.png" %}" width="35" height="35" alt="">
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Log In</a>
+                  <a class="dropdown-item" href="{% url 'signin' %}">Log In</a>
                   <a class="dropdown-item" href="#">Wishlist</a>
                   {# <div class="dropdown-divider"></div> #}
                   {# <a class="dropdown-item" href="#">Something else here</a> #}

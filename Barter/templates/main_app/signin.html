@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Boostrap CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static "main_app/login.css" %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static "favicon.ico" %}">
+    <meta charset="utf-8">
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="sidenav">
+      <div class="login-main-text">
+        <h1>Welcome to <span style="font-size:90px">Barter!</span></h1>
+        <h5>We're excited that you flew here.</h5>
+        <h5>But before we start trading, let's get to know each other first.</h5>
+      </div>
+      <img src="{% static "main_app/birds.gif" %}" alt="">
+    </div>
+    {% if logged_in %}
+      <h4>Log in successful. Redirecting...</h4>
+    {% else %}
+      <div class="main">
+        <div class="col-md-6 col-sm-12">
+          <div class="login-form">
+            <form method="POST">
+              {% csrf_token %}
+              {{ login_form }}
+              <br>
+              <input name="login" type="submit" class="btn btn-secondary" value="Login">
+              <input name="register" type="submit" class="btn btn-secondary" value="Register">
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </body>
+</html>
