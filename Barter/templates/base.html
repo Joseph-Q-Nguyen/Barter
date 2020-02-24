@@ -43,15 +43,18 @@
       </nav>
     </div>
 
+
+    <div id="static_right">
+      {% block static_right %}
+      {% endblock %}
+    </div>
+
     <div id="content">
       {% block content %}
       {% endblock %}
     </div>
 
-    <div id"static_right">
-      {% block static_right %}
-      {% endblock %}
-    </div>
+
 
     <!-- Scripts for Bootstrap 4-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
