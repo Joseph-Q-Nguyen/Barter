@@ -32,8 +32,14 @@
                   <img src="{% static "man.png" %}" width="35" height="35" alt="">
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="{% url 'signin' %}">Log In</a>
-                  <a class="dropdown-item" href="#">Wishlist</a>
+                  {% if logged_in %}
+                    <a class="dropdown-item" href="#">Hello {{ user.get_short_name }}</a>
+                    <a class="dropdown-item" href="#">Wishlist</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'logout_user' %}">Logout</a>
+                  {% else %}
+                    <a class="dropdown-item" href="{% url 'login_user' %}">Log In</a>
+                  {% endif %}
                   {# <div class="dropdown-divider"></div> #}
                   {# <a class="dropdown-item" href="#">Something else here</a> #}
                 </div>
