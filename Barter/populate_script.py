@@ -29,16 +29,21 @@ def add_item():
 	return item
 
 def populate(N=5):
-	for i in range(N):
-		item = add_item()
-		name = fk.name()
-		n = name.split()
-		uname = ''.join(name.lower().split(' '))
-		pwd = f"pwd{uname}"
-		email = f'{uname}@{fk.domain_name()}'
-		user = User.objects.get_or_create(username=uname, password=pwd, email=email, first_name=n[0], last_name=n[1])[0]
-		if (random.choice(choose)):
-			Wishlist.objects.create(item=item, user=user)
+	with open("login_details.txt", 'w') as outfile:
+		for i in range(N):
+			item = add_item()
+			name = fk.name()
+			n = name.split()
+			uname = ''.join(name.lower().split(' '))
+			pwd = f'pwd{uname}1234'
+			outfile.write(f'{uname}\t\t{pwd}\n')
+
+			email = f'{uname}@{fk.domain_name()}'
+			user = User.objects.get_or_create(username=uname, email=email, first_name=n[0], last_name=n[1])[0]
+			user.set_password(pwd)
+			user.save()
+			if random.choice(choose):
+				Wishlist.objects.create(item=item, user=user)
 		
 
 if __name__ == '__main__':
