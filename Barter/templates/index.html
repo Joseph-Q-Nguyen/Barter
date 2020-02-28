@@ -3,3 +3,59 @@
 {% block title %}
 	Barter
 {% endblock %}
+
+{% block content %}
+	{% if posts %}
+		{% for p in posts %}
+			<div class="card mt-4" style="width: 100%;">
+				<img src="" class="card-img-top" alt="">
+				<div class="card-header">
+					<h5 class="card-title">{{ p.title }}</h5>
+				</div>
+				<div class="card-body">
+					<p class="card-text">{{ p.description }}</p>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">Price: ${{ p.price }}</li>
+					<li class="list-group-item">Date: {{ p.date_posted }}</li>
+				</ul>
+				<div class="card-body">
+					<a href="#" class="card-link">Card link</a>
+					<a href="#" class="card-link">Another link</a>
+				</div>
+			</div>
+		{% endfor %}
+	{% else %}
+		<h2>No Posts Found!!!</h2>
+	{% endif %}
+{% endblock %}
+
+
+{% block static_right %}
+	<div class="card mt-4" style="width: 100%; background-color:#e3f2fd;">
+		<img src="" class="card-img-top" alt="">
+		<div class="card-header">
+			<h5 class="card-title">Wishlist?</h5>
+		</div>
+		<div id="wishlist-items">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">Item 1</li>
+				<li class="list-group-item">Item 2</li>
+				<li class="list-group-item">Item 3</li>
+				<li class="list-group-item">Item 4</li>
+				<li class="list-group-item">Item 5</li>
+				<li class="list-group-item">Item 6</li>
+				<li class="list-group-item">Item 7</li>
+				<li class="list-group-item">Item 8</li>
+				<li class="list-group-item">Item 1</li>
+				<li class="list-group-item">Blah</li>
+				<li class="list-group-item">Blah</li>
+				<li class="list-group-item">Blah</li>
+			</ul>
+		</div>
+		<div class="card-body">
+			<a href="#" class="card-link">Blah</a>
+			<a href="#" class="card-link">Blah</a>
+		</div>
+	</div>
+{% endblock %}

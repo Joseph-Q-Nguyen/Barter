@@ -1,0 +1,31 @@
+#navbar{
+    width: 100%;
+    overflow: hidden;  /*code added to prevent scroll*/
+}
+
+
+#static_right{
+    width: 300px;
+    height: 500px;
+    background-repeat: repeat-y;
+    overflow: auto;
+    position: sticky;
+    top: 90px;
+    right: 200px;
+    font-size: 16px;
+    float: right;
+}
+
+#content{
+   height: auto;
+   padding: 20px;
+   margin-left: 230px;
+   margin-right: 500px;
+   padding-bottom: 30px;
+   overflow: auto;  /*code added*/
+}
+
+#wishlist-items {
+    height: 200px;
+    overflow: scroll;
+}

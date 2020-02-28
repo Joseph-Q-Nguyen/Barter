@@ -4,39 +4,56 @@
   <head>
     <!-- Boostrap CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static "main_app/style.css" %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static "favicon.ico" %}">
+    {% block links %}
+    {% endblock %}
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-      <div class="container">
-        <a class="nav-link" href="/">
-          <img src="{% static "barter.png" %}" alt="", width="128" height="32">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <form class="form-inline my-2">
-          <input class="form-control mr-xl-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
-        </form>
-        <div id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="{% static "man.png" %}" width="35" height="35" alt="">
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Log In</a>
-                <a class="dropdown-item" href="#">Wishlist</a>
-                {# <div class="dropdown-divider"></div> #}
-                {# <a class="dropdown-item" href="#">Something else here</a> #}
-              </div>
-            </li>
-          </ul>
-      </div>
-    </nav>
+    <div id="navbar"></div>
+      <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <div class="container">
+          <a class="nav-link" href="/">
+            <img src="{% static "barter.png" %}" alt="", width="128" height="32">
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <form class="form-inline my-2">
+            <input class="form-control mr-xl-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+          </form>
+          <div id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <img src="{% static "man.png" %}" width="35" height="35" alt="">
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{% url 'signin' %}">Log In</a>
+                  <a class="dropdown-item" href="#">Wishlist</a>
+                  {# <div class="dropdown-divider"></div> #}
+                  {# <a class="dropdown-item" href="#">Something else here</a> #}
+                </div>
+              </li>
+            </ul>
+        </div>
+      </nav>
+    </div>
+
+
+    <div id="static_right">
+      {% block static_right %}
+      {% endblock %}
+    </div>
+
+    <div id="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+
 
 
     <!-- Scripts for Bootstrap 4-->
