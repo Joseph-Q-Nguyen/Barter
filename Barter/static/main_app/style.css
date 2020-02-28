@@ -23,6 +23,7 @@
    margin-right: 500px;
    padding-bottom: 30px;
    overflow: auto;  /*code added*/
+   margin-top: 70px;
 }
 
 #wishlist-items {
