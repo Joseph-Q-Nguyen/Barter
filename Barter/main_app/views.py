@@ -34,7 +34,9 @@ def login_user(request):
 				uname, lname = name.split(' ')
 				email = data['email']
 				pwd = data['password']
-				user = User.objects.get_or_create(username=''.join(name.lower().split(' ')), password=pwd, email=email, first_name=uname, last_name=lname)
+				user = User.objects.get_or_create(username=''.join(name.lower().split(' ')), email=email, first_name=uname, last_name=lname)[0]
+				user.set_password(pwd)
+				user.save()
 				return render(request, 'main_app/signin.html', context=context)
 			else:
 				username = data['username']
@@ -46,9 +48,9 @@ def login_user(request):
 				login(request, user=user)
 				context['logged_in'] = user != None
 				context['user'] = user.first_name
-				return render(request, 'index.html', context=context)
+				return index(request)
 	return render(request, "main_app/signin.html", context=context)
 
 def logout_user(request):
 	logout(request)
-	return render(request, 'index.html', context={'logged_in': False})
+	return index(request)
