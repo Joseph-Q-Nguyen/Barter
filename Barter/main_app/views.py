@@ -4,8 +4,8 @@ from .forms import LoginForm
 from .models import Item
 
 # Create your views here.
-def index(request):
-	return render(request, "index.html", context={'posts': Item.objects.all()})
+def index(request, offset, limit):
+	return render(request, "index.html", context={'posts': Item.objects.all()[offset:limit]})
 
 def login(request):
 	form = LoginForm()
