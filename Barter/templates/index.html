@@ -6,6 +6,13 @@
 
 {% block content %}
 	{% if posts %}
+	<form method="POST">
+		<div id="previous-next">
+			{% csrf_token %}
+			<button class="btn btn-primary" type="submit" value="selected" name="previous">&laquo Previous</button>
+			<a><button class="btn btn-primary" type="submit" value="selected" name="next">Next &raquo</button></a>
+		</div>
+	</form>
 		{% for p in posts %}
 			<div class="card mt-4" style="width: 100%;">
 				<img src="" class="card-img-top" alt="">
