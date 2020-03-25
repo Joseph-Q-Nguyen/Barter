@@ -37,6 +37,12 @@
     margin-left: 10px;
 }
 
+.btn-primary {
+    color: black!important;
+    background-color: #e3f2fd;
+    border-color:rgba(0,0,0,.125)!important;
+}
+
 .mt-4, .my-4 {
     margin-bottom: 1.5rem!important;
     margin-top: 0!important;
