@@ -24,10 +24,10 @@ def index(request):
 		offset = 0
 		if offset_string and offset_string.isdigit():
 			offset = int(offset_string)
-			if "next" in request.POST:
-				offset = offset + 10
-			else:
-				offset = offset - 10
+		if "next" in request.POST:
+			offset = offset + 10
+		elif "previous" in request.POST:
+			offset = offset - 10
 		return redirect("http://localhost:8000/?offset=" + str(offset))
 
 
