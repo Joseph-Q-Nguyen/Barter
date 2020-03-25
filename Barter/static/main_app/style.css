@@ -29,6 +29,7 @@
 #wishlist-items {
     height: 200px;
     overflow: scroll;
+
 }
 
 #previous-next {
@@ -46,4 +47,5 @@
 .mt-4, .my-4 {
     margin-bottom: 1.5rem!important;
     margin-top: 0!important;
+
 }
