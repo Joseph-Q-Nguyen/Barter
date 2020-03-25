@@ -26,10 +26,14 @@
           <div class="login-form">
             <form method="POST">
               {% csrf_token %}
-              {{ login_form }}
+              {{ form }}
               <br>
-              <input name="login" type="submit" class="btn btn-secondary" value="Login">
-              <input name="register" type="submit" class="btn btn-secondary" value="Register">
+              {% if is_login %}
+                <input name="login" type="submit" class="btn btn-secondary" value="Login">
+                <input name="register" type="submit" class="btn btn-secondary" value="Register">
+              {% else %}
+                <input name="sign_up" type="submit" class="btn btn-secondary" value="Submit">
+              {% endif %}
             </form>
           </div>
         </div>
