@@ -25,7 +25,7 @@ class RegisterForm(forms.Form):
 		data = super().clean()
 		email = data['email']
 		print(email)
-		if email.split('@'[1]) != 'sjsu.edu':
+		if email.split('@')[1] != 'sjsu.edu':
 			raise ValidationError("Email domain must belong to San Jose State University")
 		if password != confirm_password:
 			raise ValidationError("Passwords do not match.")

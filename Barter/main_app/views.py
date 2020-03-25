@@ -11,9 +11,7 @@ def index(request):
 	context = {'posts': Item.objects.all()}
 	if not request.user.is_anonymous:
 		context['logged_in'] = True
-		print(request.user)
 		context['user'] = request.user
-		print(request.user.first_name)
 	return render(request, "index.html", context=context)
 
 def login_user(request):
@@ -21,7 +19,6 @@ def login_user(request):
 	context = {'is_login': True, 'logged_in': False, 'form': login_form}
 	if request.method == "POST":
 		data = request.POST
-		print(data)
 		login_form = LoginForm(data)
 		if login_form.is_valid():
 			if 'register' in data:
@@ -41,13 +38,12 @@ def login_user(request):
 			else:
 				username = data['username']
 				password = data['password']
-				print(username, password)
 				user = authenticate(request, username=username, password=password)
 				if user is None:
 					raise ValidationError("Incorrect Username/Password")
 				login(request, user=user)
-				context['logged_in'] = user != None
-				context['user'] = user.first_name
+				# context['logged_in'] = user != None
+				# context['user'] = user.first_name
 				return index(request)
 	return render(request, "main_app/signin.html", context=context)
 
