@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.forms import ValidationError
 from django.contrib.auth import authenticate, login, logout
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, ListingForm
 from .models import Item
 from django.contrib.auth.models import User
 
@@ -67,3 +67,8 @@ def login_user(request):
 def logout_user(request):
 	logout(request)
 	return index(request)
+
+def createlisting(request):
+	form = ListingForm()
+	context = {'form': form}
+	return render(request, "sell.html", context=context)
