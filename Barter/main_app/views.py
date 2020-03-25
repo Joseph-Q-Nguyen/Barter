@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.forms import ValidationError
 from django.contrib.auth import authenticate, login, logout
@@ -8,11 +8,28 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 def index(request):
-	context = {'posts': Item.objects.all()}
-	if not request.user.is_anonymous:
-		context['logged_in'] = True
-		context['user'] = request.user
-	return render(request, "index.html", context=context)
+	if (request.method == "GET"):
+		offset = request.GET.get("offset")
+		if offset and offset.isdigit():
+			offset = int(offset)
+		else:
+			offset = 0
+		context={'posts': Item.objects.all()[offset: offset + 10]}
+		if not request.user.is_anonymous:
+			context['logged_in'] = True
+			context['user'] = request.user
+		return render(request, "index.html", context=context)
+	else:
+		offset_string = request.GET.get("offset")
+		offset = 0
+		if offset_string and offset_string.isdigit():
+			offset = int(offset_string)
+			if "next" in request.POST:
+				offset = offset + 10
+			else:
+				offset = offset - 10
+		return redirect("http://localhost:8000/?offset=" + str(offset))
+
 
 def login_user(request):
 	login_form = LoginForm()
