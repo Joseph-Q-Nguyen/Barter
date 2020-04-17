@@ -64,7 +64,8 @@
 
     <script type="text/javascript">
       searchField = document.getElementById("search");
-      searchField.value = sessionStorage.searchValue;
+      if (sessionStorage.searchValue)
+        searchField.value = sessionStorage.searchValue;
       searchField.oninput = function() {
         sessionStorage.searchValue = this.value;
       }

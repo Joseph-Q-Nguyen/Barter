@@ -26,7 +26,7 @@ def index(request):
 		if type(search_query) is not str:
 			search_query = ""
 		results = Item.objects.all()[offset: offset + POSTS_PER_PAGE]
-		if search_query:
+		if search_query.strip():
 			search_keywords = search_query.split()
 			# return matches from title or description. Matches are based on any of the words in the search
 			results = Item.objects.filter(
