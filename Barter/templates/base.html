@@ -21,8 +21,9 @@
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <form class="form-inline my-2">
-            <input class="form-control mr-xl-2" type="search" placeholder="Search" aria-label="Search">
+          <form class="form-inline my-2" method="POST">
+            {% csrf_token %}
+            <input class="form-control mr-xl-2" id="search" name="search_query" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
           </form>
           <div id="navbarSupportedContent">
@@ -61,6 +62,14 @@
     </div>
 
 
+    <script type="text/javascript">
+      searchField = document.getElementById("search");
+      if (sessionStorage.searchValue)
+        searchField.value = sessionStorage.searchValue;
+      searchField.oninput = function() {
+        sessionStorage.searchValue = this.value;
+      }
+    </script>
 
     <!-- Scripts for Bootstrap 4-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

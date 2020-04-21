@@ -5,30 +5,75 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, RegisterForm
 from .models import Item
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.db.models import Q
+from functools import reduce
+import operator
+
+REDIRECT_URL = "http://localhost:8000/"
+POSTS_PER_PAGE = 10
 
 # Create your views here.
 def index(request):
 	if (request.method == "GET"):
 		offset = request.GET.get("offset")
+		search_query = request.GET.get("search_query")
 		if offset and offset.isdigit():
 			offset = int(offset)
 		else:
 			offset = 0
-		context={'posts': Item.objects.all()[offset: offset + 10]}
+	
+		if type(search_query) is not str:
+			search_query = ""
+		results = Item.objects.all()[offset: offset + POSTS_PER_PAGE]
+		if search_query.strip():
+			search_keywords = search_query.split()
+			# return matches from title or description. Matches are based on any of the words in the search
+			results = Item.objects.filter(
+				reduce(operator.or_, (Q(title__icontains=k) for k in search_keywords)) 
+				|
+				reduce(operator.or_, (Q(description__icontains=k) for k in search_keywords))
+			)[offset: offset + POSTS_PER_PAGE]
+		
+		context={'posts': results}
 		if not request.user.is_anonymous:
 			context['logged_in'] = True
 			context['user'] = request.user
 		return render(request, "index.html", context=context)
 	else:
-		offset_string = request.GET.get("offset")
+		search_query = request.GET.get("search_query")
+		offset_string = ""
 		offset = 0
-		if offset_string and offset_string.isdigit():
-			offset = int(offset_string)
-		if "next" in request.POST:
-			offset = offset + 10
-		elif "previous" in request.POST:
-			offset = offset - 10
-		return redirect("http://localhost:8000/?offset=" + str(offset))
+		query_params = []
+		if "search_query" in request.POST:
+			search_query = request.POST['search_query']
+		else:
+			offset_string = request.GET.get("offset")
+			if offset_string and offset_string.isdigit():
+				offset = int(offset_string)
+			if "next" in request.POST:
+				offset = offset + POSTS_PER_PAGE
+			elif "previous" in request.POST:
+				offset = offset - POSTS_PER_PAGE
+			offset_string = "offset=" + str(offset)
+		if type(offset_string) is not str:
+			offset_string = ""
+		if type(search_query) is not str:
+			search_query = ""
+		if search_query:
+			search_query = "search_query=" + search_query
+		
+		search_query = search_query.replace(" ", "+") #replace spaces with a plus sign so theyu can go on url
+		query_params.append(search_query)
+		query_params.append(offset_string)
+
+		param_string = "?"
+		for param in query_params:
+			if param:
+				param_string = param_string + param + "&"
+		param_string = param_string[0:-1] # get rid of last '&'
+
+		return redirect(REDIRECT_URL + param_string)
 
 
 def login_user(request):

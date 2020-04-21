@@ -10,8 +10,8 @@
     background-repeat: repeat-y;
     overflow: auto;
     position: sticky;
-    top: 90px;
-    right: 200px;
+    margin-top: 90px;
+    margin-right: 200px;
     font-size: 16px;
     float: right;
 }
