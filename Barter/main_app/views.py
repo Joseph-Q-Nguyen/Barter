@@ -41,6 +41,8 @@ def index(request):
 		if not request.user.is_anonymous:
 			context['logged_in'] = True
 			context['user'] = request.user
+			user = User.objects.filter(username=request.user)[0]
+			context['wishlist'] = Wishlist.objects.filter(user=user)
 		return render(request, "index.html", context=context)
 	else:
 		search_query = request.GET.get("search_query")
