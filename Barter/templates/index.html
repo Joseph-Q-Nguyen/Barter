@@ -27,8 +27,25 @@
 					<li class="list-group-item">Date: {{ p.date_posted }}</li>
 				</ul>
 				<div class="card-body">
+					<form id="add_{{ p.pid }}" method="POST">
+						{% csrf_token %}
+						<input type="hidden" name="add_to_wishlist">
+						<input type="hidden" value="{{ p.pid }}" name="pid">
+					</form>
+					<form id="remove_{{ p.pid }}" method="POST">
+						{% csrf_token %}
+						<input type="hidden" name="remove_from_wishlist">
+						<input type="hidden" value="{{ p.pid }}" name="pid">
+					</form>
 					<a href="{% url 'productpage' pid=p.pid %}"+p.pid class="card-link">Product Details</a>
-					<a href="#" class="card-link">Contact User</a>
+					{% if logged_in %}
+						{% if p.title not in wishlist_names %}
+							<a href="#" class="card-link" onclick="document.getElementById('add_{{ p.pid }}').submit()">Add Item to Wishlist</a>
+						{% else %}
+							<a href="#" class="card-link" onclick="document.getElementById('remove_{{ p.pid }}').submit()">Remove from Wishlist</a>
+						{% endif %}
+						<a href="#" class="card-link">Contact User</a>
+					{% endif %}
 				</div>
 			</div>
 		{% endfor %}
@@ -49,7 +66,9 @@
 				{% if wishlist|length > 0 %}
 					<ul class="list-group list-group-flush">
 						{% for item in wishlist %}
-							<li class="list-group-item">{{item.item.title}}</li>
+							<li class="list-group-item">
+								<a href="{% url 'productpage' pid=item.item.pid %}" class="card-link">{{item.item.title}}</a>
+							</li>
 						{% endfor %}
 					</ul>
 				{% else %}

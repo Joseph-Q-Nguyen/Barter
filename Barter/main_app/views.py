@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.forms import ValidationError
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, RegisterForm, ListingForm
-from .models import Item
+from .models import Item, Wishlist
 from django.contrib.auth.models import User
 from datetime import date
 import uuid
@@ -17,7 +17,7 @@ POSTS_PER_PAGE = 10
 
 # Create your views here.
 def index(request):
-	if (request.method == "GET"):
+	if request.method == "GET":
 		offset = request.GET.get("offset")
 		search_query = request.GET.get("search_query")
 		if offset and offset.isdigit():
@@ -38,13 +38,13 @@ def index(request):
 			)[offset: offset + POSTS_PER_PAGE]
 		
 		context={'posts': results}
-		if not request.user.is_anonymous:
-			context['logged_in'] = True
-			context['user'] = request.user
-			user = User.objects.filter(username=request.user)[0]
-			context['wishlist'] = Wishlist.objects.filter(user=user)
+		check_login(request ,context)
 		return render(request, "index.html", context=context)
-	else:
+	elif request.method == "POST":
+		if "add_to_wishlist" in request.POST and "pid" in request.POST:
+			add_to_wishlist(request.POST["pid"], User.objects.filter(username=request.user)[0])
+		elif "remove_from_wishlist" in request.POST and "pid" in request.POST:
+			remove_from_wishlist(request.POST["pid"], User.objects.filter(username=request.user)[0])
 		search_query = request.GET.get("search_query")
 		offset_string = ""
 		offset = 0
@@ -120,6 +120,7 @@ def logout_user(request):
 def createlisting(request):
 	form = ListingForm()
 	context = {'form': form}
+	check_login(request ,context)
 	if request.method == "POST":
 		fields = request.POST
 		listing = ListingForm(fields)
@@ -137,10 +138,44 @@ def createlisting(request):
 	return render(request, "sell.html", context=context)
 
 def productpage(request, pid):
+	if request.method == "POST":
+		if "add_to_wishlist" in request.POST and "pid" in request.POST:
+			add_to_wishlist(request.POST["pid"], User.objects.filter(username=request.user)[0])
+		elif "remove_from_wishlist" in request.POST and "pid" in request.POST:
+			remove_from_wishlist(request.POST["pid"], User.objects.filter(username=request.user)[0])
+	
 	thisitem = None
 	item_list = Item.objects.filter(pid=str(pid))
 	if len(item_list) > 0:
 		thisitem = item_list[0]
 	else:
 		thisitem = None
-	return render(request, "productpage.html", {'thisitem':thisitem})
+	context = {'thisitem': thisitem}
+	check_login(request ,context)
+
+	return render(request, "productpage.html", context)
+
+# HELPER FUNCTIONS
+
+def add_to_wishlist(pid, user):
+	item = Item.objects.filter(pid=str(pid))[0]
+	wishlist_item = Wishlist.objects.filter(item=item, user=user)
+	if not wishlist_item:
+		Wishlist.objects.create(item=item, user=user)
+
+def remove_from_wishlist(pid, user):
+	item = Item.objects.filter(pid=str(pid))[0]
+	print(item.title)
+	wishlist_item = Wishlist.objects.filter(item=item, user=user)
+	if wishlist_item:
+		wishlist_item[0].delete()
+
+
+def check_login(request ,context):
+	if not request.user.is_anonymous:
+			context['logged_in'] = True
+			context['user'] = request.user
+			user = User.objects.filter(username=request.user)[0]
+			wishlist = Wishlist.objects.filter(user=user)
+			context['wishlist'] = wishlist
+			context['wishlist_names'] = list(map(lambda x : x.item.title, wishlist))

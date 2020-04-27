@@ -21,7 +21,7 @@
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <form class="form-inline my-2" method="POST">
+          <form class="form-inline my-2" method="POST" action="../">
             {% csrf_token %}
             <input class="form-control mr-xl-2" id="search" name="search_query" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>

@@ -7,29 +7,47 @@
 			<div class="col-mid-12">
 				<table class="table table-striped">
 
-	{% if thisitem is not None %}
+				{% if thisitem is not None %}
 
-		<tr>
-			<td>Title:</td> <td>{{thisitem.title}}</td>
-		</tr>
+					<tr>
+						<td>Title:</td> <td>{{thisitem.title}}</td>
+					</tr>
 
-		<tr>
-			<td>Category:</td> <td>{{thisitem.category}}</td>
-		</tr>
+				<tr>
+					<td>Category:</td> <td>{{thisitem.category}}</td>
+				</tr>
 
-		<tr>
-			<td>Price:</td> <td>{{thisitem.price}}</td>
-		</tr>
+				<tr>
+					<td>Price:</td> <td>{{thisitem.price}}</td>
+				</tr>
 
-		<tr>
-			<td>Description:</td> <td>{{thisitem.description}}</td>
-		</tr>
+				<tr>
+					<td>Description:</td> <td>{{thisitem.description}}</td>
+				</tr>
 
-	{% else %}
-		<tr><td>No data found.</td></tr>
+				{% else %}
+					<tr><td>No data found.</td></tr>
 
-	{% endif %}
+				{% endif %}
 				</table>
+				<form id="add_{{ thisitem.pid }}" method="POST">
+					{% csrf_token %}
+					<input type="hidden" name="add_to_wishlist">
+					<input type="hidden" value="{{ thisitem.pid }}" name="pid">
+				</form>
+				<form id="remove_{{ thisitem.pid }}" method="POST">
+					{% csrf_token %}
+					<input type="hidden" name="remove_from_wishlist">
+					<input type="hidden" value="{{ thisitem.pid }}" name="pid">
+				</form>
+				{% if logged_in %}
+					{% if thisitem.title not in wishlist_names %}
+						<a href="#" class="card-link" onclick="document.getElementById('add_{{ thisitem.pid }}').submit()">Add Item to Wishlist</a>
+					{% else %}
+						<a href="#" class="card-link" onclick="document.getElementById('remove_{{ thisitem.pid }}').submit()">Remove from Wishlist</a>
+					{% endif %}
+					<a href="#" class="card-link">Contact User</a>
+				{% endif %}
 			</div>
 		</div>
 	</div>
