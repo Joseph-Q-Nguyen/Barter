@@ -51,7 +51,7 @@ class ListingForm(forms.Form):
 		(ST, 'College Supply')
 	]
 
-	name= forms.CharField(label='Item Name', widget=text_widget)
+	title= forms.CharField(label='Item Name', widget=text_widget)
 	category=forms.CharField(label='Category', widget=forms.Select(attrs={'class':'custom-select'}, choices=categories))
 	price=forms.DecimalField(label='Price', widget=forms.NumberInput(attrs={'class':"form-control"}))
 	description=forms.CharField(label='Description', widget=forms.Textarea(attrs={'class':'form-control'}))

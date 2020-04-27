@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, RegisterForm, ListingForm
 from .models import Item
 from django.contrib.auth.models import User
+from datetime import date
+import uuid
 
 # Create your views here.
 def index(request):
@@ -71,4 +73,27 @@ def logout_user(request):
 def createlisting(request):
 	form = ListingForm()
 	context = {'form': form}
+	if request.method == "POST":
+		fields = request.POST
+		listing = ListingForm(fields)
+		if listing.is_valid():
+			pid=uuid.uuid4()
+			category=fields['category']
+			title=fields['title']
+			price=fields['price']
+			description=fields['description']
+			date_posted=date.today()
+
+			item = Item.objects.get_or_create(pid=pid, category=category, title=title, date_posted=date_posted, description=description, price=price)[0]
+			item.save()
+			return index(request)
 	return render(request, "sell.html", context=context)
+
+def productpage(request, pid):
+	thisitem = None
+	item_list = Item.objects.filter(pid=str(pid))
+	if len(item_list) > 0:
+		thisitem = item_list[0]
+	else:
+		thisitem = None
+	return render(request, "productpage.html", {'thisitem':thisitem})
