@@ -41,12 +41,12 @@
 					<input type="hidden" value="{{ thisitem.pid }}" name="pid">
 				</form>
 				{% if logged_in %}
-					{% if thisitem.title not in wishlist_names %}
+					{% if thisitem.pid not in wishlist_pids %}
 						<a href="#" class="card-link" onclick="document.getElementById('add_{{ thisitem.pid }}').submit()">Add Item to Wishlist</a>
 					{% else %}
 						<a href="#" class="card-link" onclick="document.getElementById('remove_{{ thisitem.pid }}').submit()">Remove from Wishlist</a>
 					{% endif %}
-					<a href="#" class="card-link">Contact User</a>
+					<a href="{% url 'user_page' id=thisitem.user.id %}" class="card-link">Contact User</a>
 				{% endif %}
 			</div>
 		</div>

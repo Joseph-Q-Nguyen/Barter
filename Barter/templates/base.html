@@ -53,8 +53,35 @@
 
 
     <div id="static_right">
-      {% block static_right %}
-      {% endblock %}
+    {% if logged_in %}
+      <div class="card mt-4" style="width: 100%; background-color:#e3f2fd;">
+        <img src="" class="card-img-top" alt="">
+        <div class="card-header">
+          <h5 class="card-title">Wishlist</h5>
+        </div>
+        <div id="wishlist-items">
+          {% if wishlist|length > 0 %}
+            <ul class="list-group list-group-flush">
+              {% for item in wishlist %}
+                <li class="list-group-item">
+                  <a href="{% url 'productpage' pid=item.item.pid %}" class="card-link">{{item.item.title}}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Your cart is empty!</li>
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="card mt-4" style="width: 100%; background-color:#e3f2fd;">
+        <div class="card-header">
+          <h5 class="card-title"><a href="{% url 'login_user' %}">Log-In</a> to see your Wishlist</h5>
+        </div>
+      </div>
+    {% endif %}
     </div>
 
     <div id="content">
