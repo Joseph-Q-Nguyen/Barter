@@ -17,7 +17,15 @@
 			<div class="card mt-4" style="width: 100%;">
 				<img src="" class="card-img-top" alt="">
 				<div class="card-header">
-					<h5 class="card-title">{{ p.title }}</h5>
+					<h5 class="card-title">{{ p.title }}
+						{% if p in user_items %}
+						<div id="edit-buttons">
+							<a href="{% url 'update_listing' pid=p.pid %}">Edit</a>
+							<a href="{% url 'delete_listing' pid=p.pid %}" 
+							onclick="return confirm('Are you sure you want to delete this listing? This cannot be undone.')">&#x274C</a>
+						</div>
+						{% endif %}
+					</h5>
 				</div>
 				<div class="card-body">
 					<p class="card-text">{{ p.description }}</p>
@@ -38,7 +46,7 @@
 						<input type="hidden" value="{{ p.pid }}" name="pid">
 					</form>
 					<a href="{% url 'productpage' pid=p.pid %}"+p.pid class="card-link">Product Details</a>
-					{% if logged_in %}
+					{% if logged_in and p not in user_items %}
 						{% if p.title not in wishlist_names %}
 							<a href="#" class="card-link" onclick="document.getElementById('add_{{ p.pid }}').submit()">Add Item to Wishlist</a>
 						{% else %}

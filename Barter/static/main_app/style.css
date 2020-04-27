@@ -47,5 +47,8 @@
 .mt-4, .my-4 {
     margin-bottom: 1.5rem!important;
     margin-top: 0!important;
+}
 
+#edit-buttons {
+    float: right;
 }

@@ -137,6 +137,47 @@ def createlisting(request):
 			return index(request)
 	return render(request, "sell.html", context=context)
 
+def update_listing(request, pid):
+	user = User.objects.filter(username=request.user)[0]
+	item_to_update = Item.objects.filter(pid=pid, user=user)
+	if not item_to_update: # if item does not belong to user, return home page
+		return index(request)
+
+	i = item_to_update[0]
+	old_vals = {
+		'title': i.title,
+		'description' : i.description,
+		'category': i.category,
+		'price' : i.price
+	}
+	form = ListingForm(old_vals)
+	context = {'form': form}
+	check_login(request ,context)
+
+	if request.method == "POST":
+		fields = request.POST
+		listing = ListingForm(fields)
+		if listing.is_valid():
+			category=fields['category']
+			title=fields['title']
+			price=fields['price']
+			description=fields['description']
+
+			Item.objects.filter(pid=pid, user=user).update(category=category, title=title, description=description, price=price)
+			return index(request)
+	return render(request, "update.html", context=context)
+
+
+def delete_listing(request, pid):
+	user = User.objects.filter(username=request.user)[0]
+	item_to_delete = Item.objects.filter(pid=pid, user=user)
+	if not item_to_delete: # if item does not belong to user, return home page
+		return index(request)
+	item_to_delete[0].delete()
+	return index(request)
+	
+
+
 def productpage(request, pid):
 	if request.method == "POST":
 		if "add_to_wishlist" in request.POST and "pid" in request.POST:
@@ -179,3 +220,4 @@ def check_login(request ,context):
 			wishlist = Wishlist.objects.filter(user=user)
 			context['wishlist'] = wishlist
 			context['wishlist_names'] = list(map(lambda x : x.item.title, wishlist))
+			context['user_items'] = Item.objects.filter(user=request.user)
