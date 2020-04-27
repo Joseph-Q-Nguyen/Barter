@@ -16,7 +16,7 @@ categories = Item.categories
 fk = Faker()
 choose = [True, False]
 
-def add_item():
+def add_item(user):
 	cat = random.choice(categories)
 	pid = uuid.uuid1()
 	title = fk.sentence()
@@ -24,14 +24,13 @@ def add_item():
 	description = f'{fk.text()} {fk.text()}'
 	price = random.randint(5, 1000)
 
-	item = Item.objects.get_or_create(pid=pid, category=cat, title=title, date_posted=date_posted, description=description, price=price)[0]
+	item = Item.objects.get_or_create(user=user, pid=pid, category=cat, title=title, date_posted=date_posted, description=description, price=price)[0]
 	item.save()
 	return item
 
 def populate(N=5):
 	with open("login_details.txt", 'w') as outfile:
 		for i in range(N):
-			item = add_item()
 			name = fk.name()
 			n = name.split()
 			uname = ''.join(name.lower().split(' '))
@@ -42,6 +41,7 @@ def populate(N=5):
 			user = User.objects.get_or_create(username=uname, email=email, first_name=n[0], last_name=n[1])[0]
 			user.set_password(pwd)
 			user.save()
+			item = add_item(user)
 			if random.choice(choose):
 				Wishlist.objects.create(item=item, user=user)
 		
