@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{%block content%}
+
+	<div class="container theme-showcase margin-top-navbar" role="main" style="margin-top: 50px">
+		<div class ="row">
+			<div class="col-mid-12">
+				<table class="table table-striped">
+
+	{% if thisitem is not None %}
+
+		<tr>
+			<td>Title:</td> <td>{{thisitem.title}}</td>
+		</tr>
+
+		<tr>
+			<td>Category:</td> <td>{{thisitem.category}}</td>
+		</tr>
+
+		<tr>
+			<td>Price:</td> <td>{{thisitem.price}}</td>
+		</tr>
+
+		<tr>
+			<td>Description:</td> <td>{{thisitem.description}}</td>
+		</tr>
+
+	{% else %}
+		<tr><td>No data found.</td></tr>
+
+	{% endif %}
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

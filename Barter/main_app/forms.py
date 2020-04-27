@@ -29,3 +29,29 @@ class RegisterForm(forms.Form):
 			raise ValidationError("Email domain must belong to San Jose State University")
 		if password != confirm_password:
 			raise ValidationError("Passwords do not match.")
+
+class ListingForm(forms.Form):
+	FN = 'FN'
+	BK = 'BK'
+	ED = 'ED'
+	DG = 'DG'
+	AP = 'AP'
+	AC = 'AC'
+	SH = 'SH'
+	ST = 'ST'
+
+	categories=	[
+		(FN, 'Furniture'),
+		(BK, 'Book'),
+		(ED, 'Electronic Device'),
+		(DG, 'Digital Good'),
+		(AP, 'Apparel'),
+		(SH, 'Shoes'),
+		(AC, 'Accessories'),
+		(ST, 'College Supply')
+	]
+
+	title= forms.CharField(label='Item Name', widget=text_widget)
+	category=forms.CharField(label='Category', widget=forms.Select(attrs={'class':'custom-select'}, choices=categories))
+	price=forms.DecimalField(label='Price', widget=forms.NumberInput(attrs={'class':"form-control"}))
+	description=forms.CharField(label='Description', widget=forms.Textarea(attrs={'class':'form-control'}))
