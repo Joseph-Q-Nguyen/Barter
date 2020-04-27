@@ -27,8 +27,8 @@
 					<li class="list-group-item">Date: {{ p.date_posted }}</li>
 				</ul>
 				<div class="card-body">
-					<a href="#" class="card-link">Card link</a>
-					<a href="#" class="card-link">Another link</a>
+					<a href="{% url 'productpage' pid=p.pid %}"+p.pid class="card-link">Product Details</a>
+					<a href="#" class="card-link">Contact User</a>
 				</div>
 			</div>
 		{% endfor %}
