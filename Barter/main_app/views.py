@@ -51,14 +51,23 @@ def login_user(request):
 	context = {'is_login': True, 'logged_in': False, 'form': login_form}
 	if request.method == "POST":
 		data = request.POST
-		login_form = LoginForm(data)
-		if login_form.is_valid():
-			if 'register' in data:
+		context['form'] = login_form
+		print(data)
+		if 'login' in data:
+			login_form = LoginForm(data)
+			if login_form.is_valid():
+				username = data['username']
+				password = data['password']
+				user = authenticate(request, username=username, password=password)
+				login(request, user=user)
+				return index(request)
+		if 'register' in data:
 				register_form = RegisterForm()
-				context['is_login'] = False
 				context['form'] = register_form
+				context['is_login'] = False
 				return render(request, 'main_app/signin.html', context=context)
-			elif 'sign_up' in data:
+		if 'sign_up' in data:
+				reg_form = RegisterForm(request.POST)
 				name = data['name']
 				uname, lname = name.split(' ')
 				email = data['email']
@@ -66,17 +75,8 @@ def login_user(request):
 				user = User.objects.get_or_create(username=''.join(name.lower().split(' ')), email=email, first_name=uname, last_name=lname)[0]
 				user.set_password(pwd)
 				user.save()
-				return render(request, 'main_app/signin.html', context=context)
-			else:
-				username = data['username']
-				password = data['password']
-				user = authenticate(request, username=username, password=password)
-				if user is None:
-					raise ValidationError("Incorrect Username/Password")
-				login(request, user=user)
-				# context['logged_in'] = user != None
-				# context['user'] = user.first_name
-				return index(request)
+				context['form'] = LoginForm()
+				return render(request, 'main_app/signin.html', context=context)	
 	return render(request, "main_app/signin.html", context=context)
 
 def logout_user(request):
