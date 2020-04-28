@@ -27,7 +27,7 @@ def index(request):
 	
 		if type(search_query) is not str:
 			search_query = ""
-		results = Item.objects.all()[offset: offset + POSTS_PER_PAGE]
+		results = Item.objects.all().order_by("-date_posted")[offset: offset + POSTS_PER_PAGE]
 		if search_query.strip():
 			search_keywords = search_query.split()
 			# return matches from title or description. Matches are based on any of the words in the search
@@ -97,8 +97,9 @@ def createlisting(request):
 			price=fields['price']
 			description=fields['description']
 			date_posted=date.today()
+			user = User.objects.filter(username=request.user)[0]
 
-			item = Item.objects.get_or_create(pid=pid, category=category, title=title, date_posted=date_posted, description=description, price=price)[0]
+			item = Item.objects.get_or_create(user=user, pid=pid, category=category, title=title, date_posted=date_posted, description=description, price=price)[0]
 			item.save()
 			return index(request)
 	return render(request, "sell.html", context=context)
