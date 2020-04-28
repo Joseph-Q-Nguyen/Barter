@@ -1,3 +1,29 @@
 from django.test import TestCase
+from django.test import Client
 
 # Create your tests here.
+
+class UnitTester(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        print("setUpTestData: Run once to set up non-modified data for all class methods.")
+        pass
+
+    def setUp(self):
+        print("setUp: Run once for every test method to setup clean data.")
+        pass
+
+    def test_false_is_false(self):
+        print("Method: test_false_is_false.")
+        self.assertFalse(False)
+
+    def test_one_plus_one_equals_two(self):
+        print("Method: test_one_plus_one_equals_two.")
+        self.assertEqual(1 + 1, 2)
+
+    def test_(self):
+        c = Client()
+        response = c.post('/login/', {'username': 'carolynruiz', 'password': 'pwdcarolynruiz1234'})
+        print(response)
+        self.assertTrue(True)
+
