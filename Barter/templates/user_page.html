@@ -1,26 +1,24 @@
 {% extends "base.html" %}
-{% load static %}
-
-{% block title %}
-	Barter
-{% endblock %}
 
 {% block content %}
-	{% if posts %}
-	<form method="POST">
-		<div id="previous-next">
-			{% csrf_token %}
-			<button class="btn btn-primary" type="submit" value="selected" name="previous">&laquo Previous</button>
-			<button class="btn btn-primary" type="submit" value="selected" name="next">Next &raquo</button>
-		</div>
-	</form>
-		{% for p in posts %}
+    {% if specified_user %}
+        <div class="card mt-4" style="width: 100%; background-color:#e3f2fd;">
+            <div class="card-header">
+                <h1>{{ specified_user.first_name }} {{ specified_user.last_name }}</h1>
+            </div>
+            <div class="card-body">
+                <h2>{{ specified_user.email }}</h2>
+            </div>
+        </div>
+        <div class="card mt-4" style="width: 100%; background-color:#e3f2fd;">
+            <div class="card-header">
+                <h2>All Items That This User Is Selling:</h2>
+            </div>
+        </div>
+        {% for p in specified_user_items %}
 			<div class="card mt-4" style="width: 100%;">
 				<img src="" class="card-img-top" alt="">
 				<div class="card-header">
-					<div class="user_images">
-						<img src="{% static "man.png" %}" width="35" height="35" alt="">
-					</div>
 					<h5 class="card-title">{{ p.title }}
 						{% if p in user_items %}
 						<div id="edit-buttons">
@@ -56,12 +54,11 @@
 						{% else %}
 							<a href="#" class="card-link" onclick="document.getElementById('remove_{{ p.pid }}').submit()">Remove from Wishlist</a>
 						{% endif %}
-						<a href="{% url 'user_page' id=p.user.id %}" class="card-link">Contact User</a>
 					{% endif %}
 				</div>
 			</div>
 		{% endfor %}
-	{% else %}
-		<h2>No Posts Found!!!</h2>
-	{% endif %}
+    {% else %}
+        <h1>User not found</h1>
+    {% endif %}
 {% endblock %}
