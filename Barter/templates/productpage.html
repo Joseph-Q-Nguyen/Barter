@@ -9,6 +9,14 @@
 
 				{% if thisitem is not None %}
 
+				{% if thisitem in user_items %}
+				<div id="edit-buttons">
+					<a href="{% url 'update_listing' pid=thisitem.pid %}">Edit</a>
+					<a href="{% url 'delete_listing' pid=thisitem.pid %}" 
+					onclick="return confirm('Are you sure you want to delete this listing? This cannot be undone.')">&#x274C</a>
+				</div>
+				{% endif %}		
+			
 					<tr>
 						<td>Title:</td> <td>{{thisitem.title}}</td>
 					</tr>
@@ -40,7 +48,7 @@
 					<input type="hidden" name="remove_from_wishlist">
 					<input type="hidden" value="{{ thisitem.pid }}" name="pid">
 				</form>
-				{% if logged_in %}
+				{% if logged_in and thisitem not in user_items %}
 					{% if thisitem.pid not in wishlist_pids %}
 						<a href="#" class="card-link" onclick="document.getElementById('add_{{ thisitem.pid }}').submit()">Add Item to Wishlist</a>
 					{% else %}

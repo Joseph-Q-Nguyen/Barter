@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
 	Barter
@@ -17,6 +18,9 @@
 			<div class="card mt-4" style="width: 100%;">
 				<img src="" class="card-img-top" alt="">
 				<div class="card-header">
+					<div class="user_images">
+						<img src="{% static "man.png" %}" width="35" height="35" alt="">
+					</div>
 					<h5 class="card-title">{{ p.title }}
 						{% if p in user_items %}
 						<div id="edit-buttons">

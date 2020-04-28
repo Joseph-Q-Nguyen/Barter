@@ -52,3 +52,8 @@
 #edit-buttons {
     float: right;
 }
+
+.user_images {
+    float: left;
+    margin-right: 10px;
+}
