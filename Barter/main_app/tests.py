@@ -60,18 +60,17 @@ class UnitTester(TestCase):
 
 
     def test_update_post(self):
-        response = self.client.post('/login', {'username': VALID_USERNAME, 'password': VALID_PASSWORD})
-        response2 = self.client.get(f'update_listing/{VALID_ITEM_PID}')
-        response3 = self.client.post(f'update_listing/{VALID_ITEM_PID}', 
+        response = self.client.post('/login', {'username': VALID_USERNAME, 'password': VALID_PASSWORD, 'login' : 'true'})
+        response = self.client.post(f'/update_listing/{VALID_ITEM_PID}', 
         {
             'title': 123,
             'category': 'ST',
             'price': 123,
             'description': 123
         })
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, FOUND)
 
-    def test_delete_post(self):
-        response = self.client.post('/login', {'username': VALID_USERNAME, 'password': VALID_PASSWORD})
-        response2 = self.client.get(f'delete_listing/{VALID_ITEM_PID}')
-        self.assertEqual(response.status_code, OK)
+    # def test_delete_post(self):
+    #     response = self.client.post('/login', {'username': VALID_USERNAME, 'password': VALID_PASSWORD})
+    #     response2 = self.client.get(f'delete_listing/{VALID_ITEM_PID}')
+    #     self.assertEqual(response.status_code, OK)
