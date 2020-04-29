@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
 text_widget = forms.TextInput(attrs={'class':'form-control'})
@@ -14,6 +15,9 @@ class LoginForm(forms.Form):
 			raise forms.ValidationError("Username field cannot be empty")
 		if len(data['password']) == 0:
 			raise forms.ValidationError("Password field cannot be empty")
+		if authenticate(username=data['username'], password=data['password']) == None:
+			raise forms.ValidationError("Incorrect Username/Password")
+
 
 class RegisterForm(forms.Form):
 	name = forms.CharField(label='Full Name', widget=text_widget)
@@ -26,7 +30,6 @@ class RegisterForm(forms.Form):
 		data = super().clean()
 		uname = data['username']
 		email = data['email']
-		print(uname, email)
 		pwd = data['password']
 		c_pwd = data['confirm_password']
 		if User.objects.filter(username=uname).exists():
@@ -34,7 +37,6 @@ class RegisterForm(forms.Form):
 		if User.objects.filter(email=email).exists():
 			raise forms.ValidationError("Email already registered.")
 		if email.split('@')[1] != 'sjsu.edu':
-			print("Email error")
 			raise forms.ValidationError("Email domain must belong to San Jose State University")
 		if pwd != c_pwd:
 			raise forms.ValidationError("Passwords do not match.")
