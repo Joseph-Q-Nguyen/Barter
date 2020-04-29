@@ -47,12 +47,9 @@ def index(request):
 
 
 def login_user(request):
-	login_form = LoginForm()
-	context = {'is_login': True, 'logged_in': False, 'form': login_form}
+	context = {'is_login': True, 'logged_in': False}
 	if request.method == "POST":
 		data = request.POST
-		context['form'] = login_form
-		print(data)
 		if 'login' in data:
 			login_form = LoginForm(data)
 			if login_form.is_valid():
@@ -62,21 +59,25 @@ def login_user(request):
 				login(request, user=user)
 				return index(request)
 		if 'register' in data:
-				register_form = RegisterForm()
-				context['form'] = register_form
-				context['is_login'] = False
-				return render(request, 'main_app/signin.html', context=context)
+			context['form'] = RegisterForm()
+			context['is_login'] = False
+			return render(request, 'main_app/signin.html', context=context)
 		if 'sign_up' in data:
-				reg_form = RegisterForm(request.POST)
-				name = data['name']
-				uname, lname = name.split(' ')
+			context['is_login'] = False
+			reg_form = RegisterForm(request.POST)
+			context['form'] = reg_form
+			if reg_form.is_valid():
+				fname, lname = data['name'].split(' ')
+				uname = data['username']
 				email = data['email']
 				pwd = data['password']
-				user = User.objects.get_or_create(username=''.join(name.lower().split(' ')), email=email, first_name=uname, last_name=lname)[0]
+				user = User.objects.get_or_create(username=uname, email=email, first_name=uname, last_name=lname)[0]
 				user.set_password(pwd)
 				user.save()
 				context['form'] = LoginForm()
-				return render(request, 'main_app/signin.html', context=context)	
+			return render(request, 'main_app/signin.html', context=context)
+	else:
+		context['form'] = LoginForm()	
 	return render(request, "main_app/signin.html", context=context)
 
 def logout_user(request):
