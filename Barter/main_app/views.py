@@ -35,7 +35,7 @@ def index(request):
 				reduce(operator.or_, (Q(title__icontains=k) for k in search_keywords)) 
 				|
 				reduce(operator.or_, (Q(description__icontains=k) for k in search_keywords))
-			)[offset: offset + POSTS_PER_PAGE]
+			).order_by("-date_posted")[offset: offset + POSTS_PER_PAGE]
 		
 		context={'posts': results}
 		check_login(request ,context)
@@ -167,7 +167,7 @@ def user_page(request, id):
 	user = User.objects.filter(id=id)
 	if user:
 		context['specified_user'] = user[0]
-		context['specified_user_items'] = Item.objects.filter(user=user[0])
+		context['specified_user_items'] = Item.objects.filter(user=user[0]).order_by("-date_posted")
 	return render(request, "user_page.html", context)
 
 # HELPER FUNCTIONS
