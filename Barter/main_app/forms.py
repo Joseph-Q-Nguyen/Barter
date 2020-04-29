@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 
 text_widget = forms.TextInput(attrs={'class':'form-control'})
 pwd_widget = forms.PasswordInput(attrs={'class':'form-control'})
@@ -16,17 +17,24 @@ class LoginForm(forms.Form):
 
 class RegisterForm(forms.Form):
 	name = forms.CharField(label='Full Name', widget=text_widget)
+	username = forms.CharField(label='User Name', widget=text_widget)
 	email = forms.EmailField(label='Email', widget=text_widget)
 	password = forms.CharField(label='Password', widget=pwd_widget)
 	confirm_password = forms.CharField(label='Confirm Password', widget=pwd_widget)
 
 	def clean(self):
 		data = super().clean()
+		uname = data['username']
 		email = data['email']
+		print(uname, email)
 		pwd = data['password']
 		c_pwd = data['confirm_password']
-		print(email)
+		if User.objects.filter(username=uname).exists():
+			raise forms.ValidationError("User already exists. Try a different username.")
+		if User.objects.filter(email=email).exists():
+			raise forms.ValidationError("Email already registered.")
 		if email.split('@')[1] != 'sjsu.edu':
+			print("Email error")
 			raise forms.ValidationError("Email domain must belong to San Jose State University")
 		if pwd != c_pwd:
 			raise forms.ValidationError("Passwords do not match.")
