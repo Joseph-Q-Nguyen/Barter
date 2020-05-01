@@ -50,6 +50,37 @@ class UnitTester(TestCase):
         list_data['description'] = ''
         listing_form = ListingForm(list_data)
         self.assertTrue(not listing_form.is_valid()) #no description
+    def test_login(self):
+        form_data = {'username': VALID_USERNAME, 'password':''}     # empty password
+        login_form = LoginForm(data=form_data)
+        self.assertTrue(not login_form.is_valid())
+        form_data['password'] = "12312"                             # Invalid Password
+        login_form = LoginForm(data=form_data)
+        self.assertTrue(not login_form.is_valid())
+        form_data['password'] = "123123"                            # Valid Password
+        login_form = LoginForm(data=form_data)
+        self.assertTrue(login_form.is_valid())
+
+    def test_register_user(self):
+        form_data = {'username':'testuser', 'email':'test@sjsu.edu', 'name':'test user', 'password':'123123', 'confirm_password':'12312'}
+        reg_form = RegisterForm(data=form_data)                     # Duplicate username
+        self.assertTrue(not reg_form.is_valid())
+
+        form_data['username'] = 'testuser2'                         # New user name, but same email
+        reg_form = RegisterForm(data=form_data)
+        self.assertTrue(not reg_form.is_valid())
+
+        form_data['email'] = 'testuser2@sjsu.edu'                   # New user name, new email, passwords do not match
+        reg_form = RegisterForm(data=form_data)
+        self.assertTrue(not reg_form.is_valid())
+
+        form_data['confirm_password'] = '123123'                    # Everything is correct now.
+        reg_form = RegisterForm(data=form_data)
+        self.assertTrue(reg_form.is_valid())
+
+        form_data['email'] = 'testuser2@gmail.com'                  # Using non sjsu email address
+        reg_form = RegisterForm(data=form_data)
+        self.assertTrue(not reg_form.is_valid())
 
 
     def test_update_post(self):
@@ -68,7 +99,3 @@ class UnitTester(TestCase):
         response = self.client.post('/login', {'username': VALID_USERNAME, 'password': VALID_PASSWORD})
         response2 = self.client.get(f'delete_listing/{VALID_ITEM_PID}')
         self.assertEqual(response.status_code, OK)
-
-
-    
-

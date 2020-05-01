@@ -47,7 +47,7 @@ def index(request):
 
 
 def login_user(request):
-	context = {'is_login': True, 'logged_in': False}
+	context = {'is_login': True, 'logged_in': False, 'form':LoginForm()}
 	if request.method == "POST":
 		data = request.POST
 		if 'login' in data:
@@ -58,11 +58,11 @@ def login_user(request):
 				user = authenticate(request, username=username, password=password)
 				login(request, user=user)
 				return index(request)
-		if 'register' in data:
+		elif 'register' in data:
 			context['form'] = RegisterForm()
 			context['is_login'] = False
 			return render(request, 'main_app/signin.html', context=context)
-		if 'sign_up' in data:
+		else:
 			context['is_login'] = False
 			reg_form = RegisterForm(request.POST)
 			context['form'] = reg_form
@@ -75,9 +75,7 @@ def login_user(request):
 				user.set_password(pwd)
 				user.save()
 				context['form'] = LoginForm()
-			return render(request, 'main_app/signin.html', context=context)
-	else:
-		context['form'] = LoginForm()	
+				return index(request)
 	return render(request, "main_app/signin.html", context=context)
 
 def logout_user(request):
