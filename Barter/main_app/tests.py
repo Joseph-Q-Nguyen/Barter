@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.test import Client
 from django.contrib.auth.models import User
 from .models import Item
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, ListingForm
 import uuid
 
 # Create your tests here.
@@ -26,6 +26,30 @@ class UnitTester(TestCase):
         user.save()
         Item.objects.get_or_create(user=user, pid=VALID_ITEM_PID, category='ST', title="test item", date_posted="2020-01-01", description="test description", price="100")
 
+    def test_create_post(self):
+        response = self.client.get('/createlisting');
+        self.assertRedirects(response, "http://localhost:8000/login", fetch_redirect_response = False)				#Attempt to enter page without login
+        
+
+        list_data = {'title':'test', 'category':'FN', 'price':'1', 'description':'test'}
+        listing_form = ListingForm(list_data)
+        self.assertTrue(listing_form.is_valid()) #correct case
+
+        list_data['title'] = ''
+        listing_form = ListingForm(list_data)
+        self.assertTrue(not listing_form.is_valid()) #no title
+
+        list_data['price'] = 'letters'
+        listing_form = ListingForm(list_data)
+        self.assertTrue(not listing_form.is_valid()) #letters in price
+
+        list_data['price'] = '-1'
+        listing_form = ListingForm(list_data)
+        self.assertTrue(not listing_form.is_valid()) #negative number in price
+
+        list_data['description'] = ''
+        listing_form = ListingForm(list_data)
+        self.assertTrue(not listing_form.is_valid()) #no description
     def test_login(self):
         form_data = {'username': VALID_USERNAME, 'password':''}     # empty password
         login_form = LoginForm(data=form_data)

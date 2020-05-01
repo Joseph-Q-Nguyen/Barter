@@ -86,22 +86,27 @@ def createlisting(request):
 	form = ListingForm()
 	context = {'form': form}
 	check_login(request ,context)
-	if request.method == "POST":
-		fields = request.POST
-		listing = ListingForm(fields)
-		if listing.is_valid():
-			pid=uuid.uuid4()
-			category=fields['category']
-			title=fields['title']
-			price=fields['price']
-			description=fields['description']
-			date_posted=date.today()
-			user = User.objects.filter(username=request.user)[0]
+	if context['logged_in'] == True:
+		if request.method == "POST":
+			fields = request.POST
+			listing = ListingForm(fields)
+			if listing.is_valid():
+				pid=uuid.uuid4()
+				category=fields['category']
+				title=fields['title']
+				price=fields['price']
+				description=fields['description']
+				date_posted=date.today()
+				user = User.objects.filter(username=request.user)[0]
 
-			item = Item.objects.get_or_create(user=user, pid=pid, category=category, title=title, date_posted=date_posted, description=description, price=price)[0]
-			item.save()
-			return index(request)
-	return render(request, "sell.html", context=context)
+				item = Item.objects.get_or_create(user=user, pid=pid, category=category, title=title, date_posted=date_posted, description=description, price=price)[0]
+				item.save()
+				return index(request)
+
+		return render(request, "sell.html", context=context)
+	else:
+		context = {'form' : LoginForm(),'is_login': True, 'logged_in': False}
+		return redirect(REDIRECT_URL + "login", context=context)
 
 def update_listing(request, pid):
 	user = User.objects.filter(username=request.user)[0]
@@ -194,6 +199,8 @@ def check_login(request, context):
 			context['wishlist'] = wishlist
 			context['wishlist_pids'] = list(map(lambda x : x.item.pid, wishlist))
 			context['user_items'] = Item.objects.filter(user=request.user)
+	else:
+			context['logged_in'] = False
 
 def check_for_wishlist_update(request):
 	if request.method == "POST":
