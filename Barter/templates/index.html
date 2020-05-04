@@ -31,7 +31,7 @@
 					</h5>
 				</div>
 				<div class="card-body item-image">
-					<img src="{% static "logos.png" %}" alt="Default Logo" width="200" height="200" onload="resize(this)" onerror="this.onerror=null; this.src='/static/logo.png'" on>
+					<img src="{{ p.image_link }}" alt="Default Logo" onerror="placeHolder(this)">
 				</div>
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item">Price: ${{ p.price }}</li>
@@ -65,9 +65,11 @@
 	{% endif %}
 
 	<script type="text/javascript">
-		function resize(object) {
-			object.width = 100;
+		function placeHolder(object) {
+			object.onerror=null; 
+			object.src='/static/logo.png'; 
 			object.height = 100;
+			object.width = 100;
 		}
 	</script>
 

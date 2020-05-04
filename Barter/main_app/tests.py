@@ -9,6 +9,7 @@ import uuid
 
 OK = 200
 FOUND = 302
+NOT_FOUND = 404
 
 VALID_USERNAME = 'testuser'
 VALID_PASSWORD = '123123'
@@ -105,4 +106,11 @@ class UnitTester(TestCase):
     def test_delete_post(self):
         response = self.client.post('/login', {'username': VALID_USERNAME, 'password': VALID_PASSWORD, 'login' : 'true'})
         response = self.client.get(f'/delete_listing/{VALID_ITEM_PID}')
+        response = self.client.get(f'/listing/{VALID_ITEM_PID}')
+        self.assertEqual(response.status_code, NOT_FOUND)
+
+    def test_delete_other_user_post(self):
+        response = self.client.post('/login', {'username': VALID_USERNAME, 'password': VALID_PASSWORD, 'login' : 'true'})
+        response = self.client.get(f'/delete_listing/{VALID_ITEM_PID2}')
+        response = self.client.get(f'/listing/{VALID_ITEM_PID2}')
         self.assertEqual(response.status_code, OK)
