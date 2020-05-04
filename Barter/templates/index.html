@@ -16,7 +16,6 @@
 	</form>
 		{% for p in posts %}
 			<div class="card mt-4" style="width: 100%;">
-				<img src="" class="card-img-top" alt="">
 				<div class="card-header">
 					<div class="user_images">
 						<img src="{% static "man.png" %}" width="35" height="35" alt="">
@@ -31,8 +30,8 @@
 						{% endif %}
 					</h5>
 				</div>
-				<div class="card-body">
-					<p class="card-text">{{ p.description }}</p>
+				<div class="card-body item-image">
+					<img src="{% static "logos.png" %}" alt="Default Logo" width="200" height="200" onload="resize(this)" onerror="this.onerror=null; this.src='/static/logo.png'" on>
 				</div>
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item">Price: ${{ p.price }}</li>
@@ -64,4 +63,13 @@
 	{% else %}
 		<h2>No Posts Found!!!</h2>
 	{% endif %}
+
+	<script type="text/javascript">
+		function resize(object) {
+			object.width = 100;
+			object.height = 100;
+		}
+	</script>
+
 {% endblock %}
+ 
