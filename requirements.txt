@@ -3,7 +3,6 @@ asgiref==3.2.3
 cffi==1.14.0
 Django==3.0.3
 Faker==4.0.3
-pkg-resources==0.0.0
 psycopg2-binary==2.8.4
 pycparser==2.20
 python-dateutil==2.8.1
