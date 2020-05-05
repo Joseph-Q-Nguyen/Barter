@@ -30,7 +30,6 @@ class UnitTester(TestCase):
         user2 = User.objects.get_or_create(username=VALID_USERNAME2, email='test2@sjsu.edu', first_name='test', last_name='user')[0]
         user2.set_password(VALID_PASSWORD)
         user2.save()
-        user2.save()
 
         Item.objects.get_or_create(user=user, pid=VALID_ITEM_PID, category='ST', title="test item", date_posted="2020-01-01", description="test description", price="100")
         Item.objects.get_or_create(user=user2, pid=VALID_ITEM_PID2, category='ST', title="test item", date_posted="2020-01-01", description="test description", price="100")
@@ -40,7 +39,7 @@ class UnitTester(TestCase):
         self.assertRedirects(response, "http://localhost:8000/login", fetch_redirect_response = False)				#Attempt to enter page without login
         
 
-        list_data = {'title':'test', 'category':'FN', 'price':'1', 'description':'test'}
+        list_data = {'title':'test', 'category':'FN', 'price':'1', 'description':'test', 'image_link': 'url'}
         listing_form = ListingForm(list_data)
         self.assertTrue(listing_form.is_valid()) #correct case
 
@@ -59,6 +58,8 @@ class UnitTester(TestCase):
         list_data['description'] = ''
         listing_form = ListingForm(list_data)
         self.assertTrue(not listing_form.is_valid()) #no description
+
+
     def test_login(self):
         form_data = {'username': VALID_USERNAME, 'password':''}     # empty password
         login_form = LoginForm(data=form_data)
@@ -75,11 +76,11 @@ class UnitTester(TestCase):
         reg_form = RegisterForm(data=form_data)                     # Duplicate username
         self.assertTrue(not reg_form.is_valid())
 
-        form_data['username'] = 'testuser2'                         # New user name, but same email
+        form_data['username'] = 'testuser3'                         # New user name, but same email
         reg_form = RegisterForm(data=form_data)
         self.assertTrue(not reg_form.is_valid())
 
-        form_data['email'] = 'testuser2@sjsu.edu'                   # New user name, new email, passwords do not match
+        form_data['email'] = 'testuser3@sjsu.edu'                   # New user name, new email, passwords do not match
         reg_form = RegisterForm(data=form_data)
         self.assertTrue(not reg_form.is_valid())
 
@@ -87,7 +88,7 @@ class UnitTester(TestCase):
         reg_form = RegisterForm(data=form_data)
         self.assertTrue(reg_form.is_valid())
 
-        form_data['email'] = 'testuser2@gmail.com'                  # Using non sjsu email address
+        form_data['email'] = 'testuser3@gmail.com'                  # Using non sjsu email address
         reg_form = RegisterForm(data=form_data)
         self.assertTrue(not reg_form.is_valid())
 
