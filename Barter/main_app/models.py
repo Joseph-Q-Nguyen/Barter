@@ -30,6 +30,7 @@ class Item(models.Model):
 	description = models.TextField()
 	date_posted = models.DateField()
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	image_link = models.CharField(max_length=128)
 
 	def __str__(self):
 		return self.title

@@ -9,6 +9,7 @@ from datetime import date
 import uuid
 from django.contrib import messages
 from django.db.models import Q
+from django.http import HttpResponse
 from functools import reduce
 import operator
 
@@ -98,8 +99,10 @@ def createlisting(request):
 				description=fields['description']
 				date_posted=date.today()
 				user = User.objects.filter(username=request.user)[0]
+				image_link=fields['image_link']
 
-				item = Item.objects.get_or_create(user=user, pid=pid, category=category, title=title, date_posted=date_posted, description=description, price=price)[0]
+				item = Item.objects.get_or_create(user=user, pid=pid, category=category, 
+				title=title, date_posted=date_posted, description=description, price=price, image_link=image_link)[0]
 				item.save()
 				return index(request)
 
@@ -119,7 +122,8 @@ def update_listing(request, pid):
 		'title': i.title,
 		'description' : i.description,
 		'category': i.category,
-		'price' : i.price
+		'price' : i.price,
+		'image_link' : i.image_link
 	}
 	form = ListingForm(old_vals)
 	context = {'form': form}
@@ -133,8 +137,9 @@ def update_listing(request, pid):
 			title=fields['title']
 			price=fields['price']
 			description=fields['description']
+			image_link=fields['image_link']
 
-			Item.objects.filter(pid=pid, user=user).update(category=category, title=title, description=description, price=price)
+			Item.objects.filter(pid=pid, user=user).update(category=category, title=title, description=description, price=price, image_link=image_link)
 			return index(request)
 	return render(request, "update.html", context=context)
 
@@ -157,7 +162,7 @@ def productpage(request, pid):
 	if len(item_list) > 0:
 		thisitem = item_list[0]
 	else:
-		thisitem = None
+		return HttpResponse(status=404)
 	context = {'thisitem': thisitem}
 	check_login(request ,context)
 
