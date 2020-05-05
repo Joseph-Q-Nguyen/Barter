@@ -27,4 +27,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python Barter/main_app/manage.py test
+        python Barter/Barter/main_app/manage.py test
