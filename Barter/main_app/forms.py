@@ -28,6 +28,8 @@ class RegisterForm(forms.Form):
 
 	def clean(self):
 		data = super().clean()
+		if 'email' not in data:
+			return
 		uname = data['username']
 		email = data['email']
 		pwd = data['password']
@@ -37,7 +39,7 @@ class RegisterForm(forms.Form):
 		if User.objects.filter(email=email).exists():
 			raise forms.ValidationError("Email already registered.")
 		if email.split('@')[1] != 'sjsu.edu':
-			raise forms.ValidationError("Email domain must belong to San Jose State University")
+			raise forms.ValidationError("Email domain must belong to San Jose State University.")
 		if pwd != c_pwd:
 			raise forms.ValidationError("Passwords do not match.")
 		return self.data

@@ -26,6 +26,11 @@
           <div class="login-form">
             <form method="POST">
               {% csrf_token %}
+              {% if errors %}
+                <div class="alert alert-danger">
+                  <strong>{{ errors }}</strong>
+                </div>
+              {% endif %}
               {{ form }}
               <br>
               {% if is_login %}

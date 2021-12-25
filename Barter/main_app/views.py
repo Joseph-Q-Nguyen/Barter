@@ -59,6 +59,8 @@ def login_user(request):
 				user = authenticate(request, username=username, password=password)
 				login(request, user=user)
 				return index(request)
+			else:
+				context['errors'] = login_form.errors['__all__']
 		elif 'register' in data:
 			context['form'] = RegisterForm()
 			context['is_login'] = False
